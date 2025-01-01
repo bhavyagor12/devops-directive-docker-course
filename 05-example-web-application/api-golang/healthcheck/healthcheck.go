@@ -12,7 +12,7 @@ func main() {
 
 	port, exists := os.LookupEnv("PORT")
 	if !exists {
-		port = "8080"
+		port = "8084"
 	}
 
 	client := http.Client{

@@ -1,26 +1,14 @@
 package main
 
 import (
-	"io/ioutil"
-	"log"
-	"os"
-	"time"
-
-	"github.com/gin-gonic/gin"
-
 	"api-golang/database"
+	"github.com/gin-gonic/gin"
+	"log"
+	"time"
 )
 
 func init() {
-	databaseUrl := os.Getenv("DATABASE_URL")
-	if databaseUrl == "" {
-		content, err := ioutil.ReadFile(os.Getenv("DATABASE_URL_FILE"))
-		if err != nil {
-			log.Fatal(err)
-		}
-		databaseUrl = string(content)
-	}
-
+	databaseUrl := "postgres://postgres:foobarbaz@localhost:5452/postgres"
 	errDB := database.InitDB(databaseUrl)
 	if errDB != nil {
 		log.Fatalf("⛔ Unable to connect to database: %v\n", errDB)
@@ -48,5 +36,5 @@ func main() {
 		c.JSON(200, "pong")
 	})
 
-	r.Run() // listen and serve on 0.0.0.0:8080 (or "PORT" env var)
+	r.Run("0.0.0.0:8084") // listen and serve on 0.0.0.0:8080 (or "PORT" env var)
 }

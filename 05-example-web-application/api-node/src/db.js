@@ -1,10 +1,8 @@
-const fs = require('fs');
+const fs = require("fs");
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
-databaseUrl =
-  process.env.DATABASE_URL ||
-  fs.readFileSync(process.env.DATABASE_URL_FILE, 'utf8');
+databaseUrl = "postgres://postgres:foobarbaz@localhost:5452/postgres";
 
 const pool = new Pool({
   connectionString: databaseUrl,
@@ -12,8 +10,9 @@ const pool = new Pool({
 
 // the pool will emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
-pool.on('error', (err, client) => {
-  console.error('Unexpected error on idle client', err);
+pool.on("error", (err, client) => {
+  console.log("HERE")
+  console.error("Unexpected error on idle client", err);
   process.exit(-1);
 });
 
@@ -21,7 +20,7 @@ pool.on('error', (err, client) => {
 const getDateTime = async () => {
   const client = await pool.connect();
   try {
-    const res = await client.query('SELECT NOW() as now;');
+    const res = await client.query("SELECT NOW() as now;");
     return res.rows[0];
   } catch (err) {
     console.log(err.stack);

@@ -6,7 +6,7 @@ run-postgres:
 	-docker run \
 		-e POSTGRES_PASSWORD=foobarbaz \
 		-v pgdata:/var/lib/postgresql/data \
-		-p 5432:5432 \
+		-p 5452:5432 \
 		postgres:15.1-alpine
 
 .PHONY: run-api-node

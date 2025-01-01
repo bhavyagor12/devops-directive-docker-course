@@ -10,13 +10,13 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/golang': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8084',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/golang/, ''),
         secure: false,
       },
       '/api/node': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3003',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/node/, ''),
         secure: false,
