@@ -1,10 +1,20 @@
-FROM node:19.6.0-alpine
+FROM node:19.6-alpine
 
-COPY package.json ./
+WORKDIR /usr/src/app
 
-RUN npm install
+ENV NODE_ENV=PRODUCTION
 
-COPY . .
+COPY package.json package-lock.json ./
 
-CMD [ "npm", "run","dev" ]
+RUN --mount=type=cache,target=/usr/src/app/.npm \ 
+  npm set cache /usr/src/app/.npm && \
+  npm ci --only=production
+
+USER node
+
+COPY --chown=node:node ./src .
+
+EXPOSE 3000
+
+CMD [ "node", "index.js" ]
 
