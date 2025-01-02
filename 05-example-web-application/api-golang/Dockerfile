@@ -1,10 +1,14 @@
-FROM golang:1.19-buster as build
+FROM golang:1.19-buster AS build
 
 WORKDIR /app
 
+RUN useradd -u 10001 nonroot
+
 COPY go.mod go.sum ./
 
-RUN go mod download
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \ 
+    go mod download
 
 COPY . .
 
@@ -16,7 +20,15 @@ RUN go build \
 ###
 FROM scratch
 
+ENV GIN_MODE=release
+
+COPY --from=build /etc/passwd /etc/passwd
 COPY --from=build /app/api-golang api-golang
+
+USER nonroot
+
+#document the port the container listens on
+EXPOSE 8084 
 
 CMD ["/api-golang"]
 
